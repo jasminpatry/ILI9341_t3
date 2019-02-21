@@ -558,36 +558,34 @@ void ILI9341_t3::writeRect2BPP(int16_t x, int16_t y, int16_t w, int16_t h, const
 // writeRect1BPP - 	write 1 bit per pixel paletted bitmap
 //					bitmap data in array at pixels, 1 bit per pixel
 //					color palette data in array at palette
-//					width must be at least 8 pixels
 void ILI9341_t3::writeRect1BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette)
 {
    	SPI.beginTransaction(SPISettings(SPICLOCK, MSBFIRST, SPI_MODE0));
 	setAddr(x, y, x+w-1, y+h-1);
 	writecommand_cont(ILI9341_RAMWR);
 	for(y=h; y>0; y--) {
+		uint8_t b;
 		for(x=w; x>8; x-=8) {
-			//unrolled loop might be faster?
-			writedata16_cont(palette[((*pixels)>>7)&0x1]);
-			writedata16_cont(palette[((*pixels)>>6)&0x1]);
-			writedata16_cont(palette[((*pixels)>>5)&0x1]);
-			writedata16_cont(palette[((*pixels)>>4)&0x1]);
-			writedata16_cont(palette[((*pixels)>>3)&0x1]);
-			writedata16_cont(palette[((*pixels)>>2)&0x1]);
-			writedata16_cont(palette[((*pixels)>>1)&0x1]);
-			writedata16_cont(palette[(*pixels++)&0x1]);
+			b = *pixels++;
+			writedata16_cont(palette[(b>>7)&0x1]);
+			writedata16_cont(palette[(b>>6)&0x1]);
+			writedata16_cont(palette[(b>>5)&0x1]);
+			writedata16_cont(palette[(b>>4)&0x1]);
+			writedata16_cont(palette[(b>>3)&0x1]);
+			writedata16_cont(palette[(b>>2)&0x1]);
+			writedata16_cont(palette[(b>>1)&0x1]);
+			writedata16_cont(palette[(b>>0)&0x1]);
 		}
-		writedata16_cont(palette[((*pixels)>>7)&0x1]);
-		writedata16_cont(palette[((*pixels)>>6)&0x1]);
-		writedata16_cont(palette[((*pixels)>>5)&0x1]);
-		writedata16_cont(palette[((*pixels)>>4)&0x1]);
-		writedata16_cont(palette[((*pixels)>>3)&0x1]);
-		writedata16_cont(palette[((*pixels)>>2)&0x1]);
-		writedata16_cont(palette[((*pixels)>>1)&0x1]);
-		writedata16_last(palette[(*pixels++)&0x1]);
+		b = *pixels++;
+		uint8_t mask = 0x80;
+		for (; x>1; x--) {
+			writedata16_cont(palette[(b&mask)?1:0]);
+			mask>>=1;
+		}
+		writedata16_last(palette[(b&mask)?1:0]);
 	}
 	SPI.endTransaction();
 }
-
 
 static const uint8_t init_commands[] = {
 	4, 0xEF, 0x03, 0x80, 0x02,
