@@ -496,7 +496,7 @@ void ILI9341_t3::writeRect(int16_t x, int16_t y, int16_t w, int16_t h, const uin
 // writeRect8BPP - 	write 8 bit per pixel paletted bitmap
 //					bitmap data in array at pixels, one byte per pixel
 //					color palette data in array at palette
-void ILI9341_t3::writeRect8BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette )
+void ILI9341_t3::writeRect8BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette)
 {
    	SPI.beginTransaction(SPISettings(SPICLOCK, MSBFIRST, SPI_MODE0));
 	setAddr(x, y, x+w-1, y+h-1);
@@ -514,7 +514,7 @@ void ILI9341_t3::writeRect8BPP(int16_t x, int16_t y, int16_t w, int16_t h, const
 //					bitmap data in array at pixels, 4 bits per pixel
 //					color palette data in array at palette
 //					width must be at least 2 pixels
-void ILI9341_t3::writeRect4BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette )
+void ILI9341_t3::writeRect4BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette)
 {
    	SPI.beginTransaction(SPISettings(SPICLOCK, MSBFIRST, SPI_MODE0));
 	setAddr(x, y, x+w-1, y+h-1);
@@ -531,10 +531,10 @@ void ILI9341_t3::writeRect4BPP(int16_t x, int16_t y, int16_t w, int16_t h, const
 }
 
 // writeRect2BPP - 	write 2 bit per pixel paletted bitmap
-//					bitmap data in array at pixels, 4 bits per pixel
+//					bitmap data in array at pixels, 2 bits per pixel
 //					color palette data in array at palette
 //					width must be at least 4 pixels
-void ILI9341_t3::writeRect2BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette )
+void ILI9341_t3::writeRect2BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette)
 {
    	SPI.beginTransaction(SPISettings(SPICLOCK, MSBFIRST, SPI_MODE0));
 	setAddr(x, y, x+w-1, y+h-1);
@@ -556,10 +556,10 @@ void ILI9341_t3::writeRect2BPP(int16_t x, int16_t y, int16_t w, int16_t h, const
 }
 
 // writeRect1BPP - 	write 1 bit per pixel paletted bitmap
-//					bitmap data in array at pixels, 4 bits per pixel
+//					bitmap data in array at pixels, 1 bit per pixel
 //					color palette data in array at palette
 //					width must be at least 8 pixels
-void ILI9341_t3::writeRect1BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette )
+void ILI9341_t3::writeRect1BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette)
 {
    	SPI.beginTransaction(SPISettings(SPICLOCK, MSBFIRST, SPI_MODE0));
 	setAddr(x, y, x+w-1, y+h-1);
@@ -1559,50 +1559,3 @@ void ILI9341_t3::sleep(bool enable) {
 		delay(5);
 	}
 }
-
-void Adafruit_GFX_Button::initButton(ILI9341_t3 *gfx,
-	int16_t x, int16_t y, uint8_t w, uint8_t h,
-	uint16_t outline, uint16_t fill, uint16_t textcolor,
-	const char *label, uint8_t textsize)
-{
-	_x = x;
-	_y = y;
-	_w = w;
-	_h = h;
-	_outlinecolor = outline;
-	_fillcolor = fill;
-	_textcolor = textcolor;
-	_textsize = textsize;
-	_gfx = gfx;
-	strncpy(_label, label, 9);
-	_label[9] = 0;
-}
-
-void Adafruit_GFX_Button::drawButton(bool inverted)
-{
-	uint16_t fill, outline, text;
-
-	if (! inverted) {
-		fill = _fillcolor;
-		outline = _outlinecolor;
-		text = _textcolor;
-	} else {
-		fill =  _textcolor;
-		outline = _outlinecolor;
-		text = _fillcolor;
-	}
-	_gfx->fillRoundRect(_x - (_w/2), _y - (_h/2), _w, _h, min(_w,_h)/4, fill);
-	_gfx->drawRoundRect(_x - (_w/2), _y - (_h/2), _w, _h, min(_w,_h)/4, outline);
-	_gfx->setCursor(_x - strlen(_label)*3*_textsize, _y-4*_textsize);
-	_gfx->setTextColor(text);
-	_gfx->setTextSize(_textsize);
-	_gfx->print(_label);
-}
-
-bool Adafruit_GFX_Button::contains(int16_t x, int16_t y)
-{
-	if ((x < (_x - _w/2)) || (x > (_x + _w/2))) return false;
-	if ((y < (_y - _h/2)) || (y > (_y + _h/2))) return false;
-	return true;
-}
-
