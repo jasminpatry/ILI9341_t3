@@ -510,6 +510,42 @@ void ILI9341_t3::writeRect8BPP(int16_t x, int16_t y, int16_t w, int16_t h, const
 	SPI.endTransaction();
 }
 
+
+void ILI9341_t3::updateRect8BPP(int16_t x, int16_t y, int16_t dX, int16_t dY, const uint8_t *pixels, const uint8_t *prevPixels, const uint16_t * palette)
+{
+   	SPI.beginTransaction(SPISettings(SPICLOCK, MSBFIRST, SPI_MODE0));
+
+	for (int iY = 0; iY < dY; ++iY)
+	{
+		int iXMic;
+		int iXMac;
+		int iRow = iY * dX;
+
+		for (int iX = 0; iX < dX; ++iX)
+		{
+			if (pixels[iRow + iX] != prevPixels[iRow + iX])
+			{
+				iXMic = iX;
+				++iX;
+				while (iX < dX && pixels[iRow + iX] != prevPixels[iRow + iX])
+					++iX;
+
+				iXMac = iX;
+
+				setAddr(x + iXMic, y + iY, x + iXMac - 1, y + iY);
+				writecommand_cont(ILI9341_RAMWR);
+
+				for (iX = iXMic; iX < iXMac - 1; ++iX)
+					writedata16_cont(palette[pixels[iRow + iX]]);
+
+				writedata16_last(palette[pixels[iRow + iX]]);
+			}
+		}
+	}
+
+	SPI.endTransaction();
+}
+
 // writeRect4BPP - 	write 4 bit per pixel paletted bitmap
 //					bitmap data in array at pixels, 4 bits per pixel
 //					color palette data in array at palette

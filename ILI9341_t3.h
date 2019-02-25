@@ -232,25 +232,27 @@ class ILI9341_t3 : public Print
 	// writeRect8BPP - 	write 8 bit per pixel paletted bitmap
 	//					bitmap data in array at pixels, one byte per pixel
 	//					color palette data in array at palette
-	void writeRect8BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette );
+	void writeRect8BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette);
+
+	void updateRect8BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint8_t *prevPixels, const uint16_t * palette);
 
 	// writeRect4BPP - 	write 4 bit per pixel paletted bitmap
 	//					bitmap data in array at pixels, 4 bits per pixel
 	//					color palette data in array at palette
 	//					width must be at least 2 pixels
-	void writeRect4BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette );
+	void writeRect4BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette);
 	
 	// writeRect2BPP - 	write 2 bit per pixel paletted bitmap
 	//					bitmap data in array at pixels, 4 bits per pixel
 	//					color palette data in array at palette
 	//					width must be at least 4 pixels
-	void writeRect2BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette );
+	void writeRect2BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette);
 	
 	// writeRect1BPP - 	write 1 bit per pixel paletted bitmap
 	//					bitmap data in array at pixels, 4 bits per pixel
 	//					color palette data in array at palette
 	//					width must be at least 8 pixels
-	void writeRect1BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette );
+	void writeRect1BPP(int16_t x, int16_t y, int16_t w, int16_t h, const uint8_t *pixels, const uint16_t * palette);
 
 	// from Adafruit_GFX.h
 	void drawCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color);
