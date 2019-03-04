@@ -284,7 +284,7 @@ class ILI9341_t3 : public Print
 	void setFont(const ILI9341_t3_font_t &f) { font = &f; }
 	void setFontAdafruit(void) { font = NULL; }
 	void drawFontChar(unsigned int c);
-	int16_t strPixelLen(char * str);
+	int16_t strPixelLen(const char * str);
 
  protected:
 	int16_t _width, _height; // Display w/h as modified by current rotation
